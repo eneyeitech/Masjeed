@@ -1,0 +1,21 @@
+package com.example.android.masjeed;
+
+import android.content.BroadcastReceiver;
+import android.content.Context;
+import android.content.Intent;
+import android.os.Build;
+
+public class TimeChangedReceiver extends BroadcastReceiver {
+    @Override
+    public void onReceive(Context context, Intent intent) {
+        //MindtrackLog.add("Time Change");
+        //context.startService(new Intent(context, PrayingDayCalculateHandler.class));
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            context.startForegroundService(new Intent(context, PrayingDayCalculateHandler.class));
+        }else {
+            context.startService(new Intent(context, PrayingDayCalculateHandler.class));
+        }
+    }
+
+}
