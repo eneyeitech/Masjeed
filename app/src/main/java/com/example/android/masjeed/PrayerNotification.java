@@ -15,6 +15,8 @@ import android.os.IBinder;
 import android.util.Log;
 
 import java.util.Calendar;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import androidx.annotation.RequiresApi;
 import androidx.core.app.NotificationCompat;
@@ -132,7 +134,7 @@ public class PrayerNotification extends Service {
             builder.setSound(sound, AudioManager.STREAM_ALARM);
             builder.setOnlyAlertOnce(true);
             builder.setAutoCancel(true);
-            builder.setTimeoutAfter(300000L);
+            builder.setTimeoutAfter(180000L);
         } else {
             Log.d("Audio-2","2");
             builder = new NotificationCompat.Builder(this, CHANNEL_ID).
@@ -150,10 +152,21 @@ public class PrayerNotification extends Service {
             builder.setTimeoutAfter(180000L);
         }
 
-
+        final int id = (int) System.currentTimeMillis();
 
         final NotificationManagerCompat mNotificationManager = NotificationManagerCompat.from(this);
-        mNotificationManager.notify(0, builder.build());
+        mNotificationManager.notify(id, builder.build());
+
+        final Context appContext = getApplicationContext();
+        TimerTask task = new TimerTask() {
+         public void run() {
+            mNotificationManager.cancel(id);
+         }
+         };
+         Timer timer = new Timer("Stop Prayer Timer");
+
+         long delay = 180000L;
+         timer.schedule(task, delay);
 
     }
 
