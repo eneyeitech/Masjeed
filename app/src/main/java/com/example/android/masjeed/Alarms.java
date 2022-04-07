@@ -3,8 +3,10 @@ package com.example.android.masjeed;
 import android.app.ActivityManager;
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.os.SystemClock;
@@ -40,17 +42,35 @@ public class Alarms {
         Bundle details = new Bundle();
         details.putString("prayName", extra);
         Intent alarmReceiver = new Intent(context, PrayerAlarm.class);
+
+        final int id2 = (int) System.currentTimeMillis();
+
         alarmReceiver.putExtras(details);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, alarmReceiver, PendingIntent.FLAG_UPDATE_CURRENT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id2, alarmReceiver, PendingIntent.FLAG_ONE_SHOT);
+
+        ComponentName receiver = new ComponentName(context, StartUpBootReceiver.class);
+        PackageManager pm = context.getPackageManager();
+
+        pm.setComponentEnabledSetting(receiver,
+                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
+                PackageManager.DONT_KILL_APP);
+
         //alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             // kitkat...
-            //alarmManager.setExactAndAllowWhileIdle(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-            alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+            alarmManager.setExact(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+            /**alarmManager.setInexactRepeating(AlarmManager.RTC_WAKEUP,
+                    calendar.getTimeInMillis(),
+                    AlarmManager.INTERVAL_DAY,
+                    pendingIntent); //setInexactRepeating()*/
         } else {
-            //alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
-            alarmManager.setRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), AlarmManager.INTERVAL_DAY, pendingIntent);
+            alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
+            /**alarmManager.setRepeating(AlarmManager.RTC_WAKEUP,
+                    calendar.getTimeInMillis(),
+                    AlarmManager.INTERVAL_DAY,
+                    pendingIntent);*/
         }
+
     }
 
 

@@ -267,6 +267,7 @@ public class TimingsFragment extends Fragment {
 
             Log.d("TIMETIEN::1",String.valueOf(currentDate));
             Log.d("TIMETIEN::2",String.valueOf(preferences.getString("isha", "")));
+            Log.d("Mosque Code::2",String.valueOf(preferences.getString("mosquecode", "")));
 
             Log.d("Fajr",String.valueOf(fajrDate));
             Log.d("Fajr",String.valueOf(format.format(fajrDate)));
@@ -292,8 +293,10 @@ public class TimingsFragment extends Fragment {
 
 
         } catch (Exception e) {
+
             e.printStackTrace();
             SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+            Log.d("Mosque Code::Catch",String.valueOf(preferences.getString("mosquecode", "")));
             mosqueName.setText(preferences.getString("mosquename", "My Mosque"));
             donation.setText(preferences.getString("donation", ""));
             fajr.setText(preferences.getString("fajr", ""));

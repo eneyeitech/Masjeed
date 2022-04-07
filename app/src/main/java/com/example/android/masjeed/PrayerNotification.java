@@ -147,7 +147,7 @@ public class PrayerNotification extends Service {
             builder.setSound(sound, AudioManager.STREAM_ALARM);
             builder.setOnlyAlertOnce(true);
             builder.setAutoCancel(true);
-            builder.setTimeoutAfter(300000L);
+            builder.setTimeoutAfter(180000L);
         }
 
 

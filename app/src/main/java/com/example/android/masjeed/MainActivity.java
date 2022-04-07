@@ -195,7 +195,9 @@ public class MainActivity extends AppCompatActivity {
                     System.out.println("Name, Code, Fajr, Sunrise, Zuhr, Asr, Maghrib, Isha");
                     Log.d("SUCCESS.", "Name, Code, Fajr, Sunrise, Zuhr, Asr, Maghrib, Isha");
 
+
                     String mc = preferences.getString("mosquecode", mosque_code);
+                    Log.d("Mosque Code.", mc);
                     for (List row : values) {
                         // Print columns A and E, which correspond to indices 0 and 4.
                         String code = (String) row.get(1);

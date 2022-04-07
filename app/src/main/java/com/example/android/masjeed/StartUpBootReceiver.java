@@ -12,5 +12,9 @@ public class StartUpBootReceiver extends BroadcastReceiver {
             //MindtrackLog.add("Boot Complete");
             context.startService(new Intent(context, PrayingDayCalculateHandler.class));
         }
+        if (intent.getAction().equals("android.intent.action.BOOT_COMPLETED")) {
+            // Set the alarm here.
+            //context.startService(new Intent(context, PrayingDayCalculateHandler.class));
+        }
     }
 }
