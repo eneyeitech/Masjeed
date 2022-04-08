@@ -26,6 +26,7 @@
 
 
     <dimen name="about_text_padding">5dip</dimen>
+    <dimen name="fab_margin">16dp</dimen>
 
     <!-- about text size -->
 

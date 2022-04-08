@@ -59,10 +59,6 @@ public class MainActivity extends AppCompatActivity {
     private TextView name, fajr, sunrise, zuhr, asr, magrib, isha, jummaah;
     private SimpleDateFormat format;
 
-    public static final String CHANNEL_ID = "#180";
-    public static final String CHANNEL_NAME = "Prayer Time Notification";
-    public static final String CHANNEL_DESCRIPTION = "New Implementation";
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -86,6 +82,9 @@ public class MainActivity extends AppCompatActivity {
                         .setAction("Action", null).show();
             }
         });
+
+        getApplicationContext().startService(new Intent(getApplicationContext(), PrayingDayCalculateHandler.class));
+        //fetchMosqueTimings();
     }
 
     @Override
