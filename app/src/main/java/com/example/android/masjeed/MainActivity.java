@@ -1,8 +1,13 @@
 package com.example.android.masjeed;
 
+import android.app.NotificationChannel;
+import android.app.NotificationManager;
+import android.content.ContentResolver;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.media.AudioAttributes;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
@@ -59,6 +64,10 @@ public class MainActivity extends AppCompatActivity {
     private TextView name, fajr, sunrise, zuhr, asr, magrib, isha, jummaah;
     private SimpleDateFormat format;
 
+    public static final String CHANNEL_ID = "#180";
+    public static final String CHANNEL_NAME = "Prayer Time Notification";
+    public static final String CHANNEL_DESCRIPTION = "New Implementation";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -74,6 +83,48 @@ public class MainActivity extends AppCompatActivity {
         //NavController navController = Navigation.findNavController(this, R.id.nav_host_fragment_content_main);
         //appBarConfiguration = new AppBarConfiguration.Builder(navController.getGraph()).build();
         //NavigationUI.setupActionBarWithNavController(this, navController, appBarConfiguration);
+
+        NotificationManager notificationManager = null;
+        Uri sound = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getApplicationContext().getPackageName() + "/" + R.raw.yusuf_islam);  //Here is FILE_NAME is the name of file that you want to play
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            NotificationChannel channel = new NotificationChannel(
+                    CHANNEL_ID,
+                    CHANNEL_NAME,
+                    NotificationManager.IMPORTANCE_HIGH
+            );
+
+            AudioAttributes attributes = new AudioAttributes.Builder()
+                    .setContentType(android.media.AudioAttributes.CONTENT_TYPE_SPEECH)
+                    .setUsage(android.media.AudioAttributes.USAGE_NOTIFICATION)
+                    .build();
+
+            /**NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID,
+             getApplicationContext().getString(R.string.app_name),
+             NotificationManager.IMPORTANCE_HIGH);*/
+            Log.d("Audio","1");
+            // Configure the notification channel.
+            channel.setDescription(CHANNEL_DESCRIPTION);
+            channel.enableLights(true);
+            channel.enableVibration(true);
+            channel.setSound(sound, attributes); // This is IMPORTANT
+            notificationManager = getSystemService(NotificationManager.class);
+            notificationManager.createNotificationChannel(channel);
+        } else {
+            Log.d("Audio","2");
+            notificationManager =
+                    (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
+        }
+
+       if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
+         && !notificationManager.isNotificationPolicyAccessGranted()) {
+
+         Intent intent = new Intent(
+         android.provider.Settings
+         .ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
+
+         startActivity(intent);
+         }
 
         binding.fab.setOnClickListener(new View.OnClickListener() {
             @Override

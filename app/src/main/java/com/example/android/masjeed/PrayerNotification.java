@@ -105,8 +105,12 @@ public class PrayerNotification extends Service {
 
         NotificationCompat.Builder builder;
         boolean aboveLollipopFlag = android.os.Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
+        /**PendingIntent intent = PendingIntent.getActivity(this, 0,
+                new Intent(this, MainActivity.class), 0);*/
+
         PendingIntent intent = PendingIntent.getActivity(this, 0,
-                new Intent(this, MainActivity.class), 0);
+                new Intent(), 0);
+
         Uri sound = null;
         AudioAttributes attributes = null;
         sound = Uri.parse(ContentResolver.SCHEME_ANDROID_RESOURCE + "://" + getApplicationContext().getPackageName() + "/" + R.raw.yusuf_islam);  //Here is FILE_NAME is the name of file that you want to play

@@ -81,7 +81,7 @@ public class PrayingDayCalculateHandler extends IntentService {
 
             Alarms.setNotificationAlarm(getApplicationContext(), hr
                     , min, PRAYER_SIG + i, i + "");
-            Log.d("%s :: %s", hr + " "+min);
+            Log.d("%s :: %s", hr + " "+min+" "+i);
             Log.d("String_date" , prayerTimes.get(i).getHour()+" "+prayerTimes.get(i).getMinute());
 
         }
