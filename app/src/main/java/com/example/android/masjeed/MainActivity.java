@@ -102,7 +102,7 @@ public class MainActivity extends AppCompatActivity {
             /**NotificationChannel mChannel = new NotificationChannel(CHANNEL_ID,
              getApplicationContext().getString(R.string.app_name),
              NotificationManager.IMPORTANCE_HIGH);*/
-            Log.d("Audio","1");
+            Log.d("Audio","14");
             // Configure the notification channel.
             channel.setDescription(CHANNEL_DESCRIPTION);
             channel.enableLights(true);
@@ -111,7 +111,7 @@ public class MainActivity extends AppCompatActivity {
             notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
         } else {
-            Log.d("Audio","2");
+            Log.d("Audio","24");
             notificationManager =
                     (NotificationManager) getApplicationContext().getSystemService(Context.NOTIFICATION_SERVICE);
         }
