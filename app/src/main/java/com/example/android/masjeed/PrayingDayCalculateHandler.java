@@ -90,7 +90,9 @@ public class PrayingDayCalculateHandler extends IntentService {
         sendBroadcast(new Intent().setAction("prayer.information.change"));
 
         stopSelf();
+        AlarmReceiver.completeWakefulIntent(intent);
         PrayingDayCalculateAlarm.completeWakefulIntent(intent);
+
     }
 
 

@@ -1,7 +1,9 @@
 package com.example.android.masjeed;
 
+import android.app.AlarmManager;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.app.PendingIntent;
 import android.content.ContentResolver;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -136,6 +138,7 @@ public class MainActivity extends AppCompatActivity {
 
         getApplicationContext().startService(new Intent(getApplicationContext(), PrayingDayCalculateHandler.class));
         //fetchMosqueTimings();
+        triggerAt5AfterMidnight(getApplicationContext());
     }
 
     @Override
@@ -205,6 +208,38 @@ public class MainActivity extends AppCompatActivity {
         });
 
         builder.show();
+    }
+
+    private AlarmManager alarmMgr;
+    private PendingIntent alarmIntent;
+
+    public void triggerAt5AfterMidnight(Context context) {
+        Log.d("Function-1", " triggerAt5AfterMidnight invoked");
+        //Context context = getApplicationContext();
+
+        alarmMgr = (AlarmManager)context.getSystemService(Context.ALARM_SERVICE);
+        Intent intent = new Intent(context, AlarmReceiver.class);
+        alarmIntent = PendingIntent.getBroadcast(context, 0, intent, 0);
+
+        // Set the alarm to start at approximately 1:00 a.m.
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+        calendar.set(Calendar.HOUR_OF_DAY, 1);
+        calendar.set(Calendar.MINUTE, 0);
+
+
+
+        // With setInexactRepeating(), you have to use one of the AlarmManager interval
+        // constants--in this case, AlarmManager.INTERVAL_DAY.
+        alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                AlarmManager.INTERVAL_DAY, alarmIntent);
+
+        /**alarmMgr.setInexactRepeating(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(),
+                1000 * 60, alarmIntent);*/
+
+        //alarmMgr.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), alarmIntent);
+
+        Log.d("Function-2", " triggerAt5AfterMidnight invoked");
     }
 
     @Override

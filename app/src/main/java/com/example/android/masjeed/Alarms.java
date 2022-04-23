@@ -46,7 +46,7 @@ public class Alarms {
         final int id2 = (int) System.currentTimeMillis();
 
         alarmReceiver.putExtras(details);
-        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id2, alarmReceiver, PendingIntent.FLAG_ONE_SHOT);
+        PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, alarmReceiver, PendingIntent.FLAG_ONE_SHOT);
 
         ComponentName receiver = new ComponentName(context, StartUpBootReceiver.class);
         PackageManager pm = context.getPackageManager();

@@ -72,6 +72,9 @@
             android:name=".PrayerAlarm"
             android:enabled="true" />
         <receiver
+            android:name=".AlarmReceiver"
+            android:enabled="true" />
+        <receiver
             android:name=".PrayingDayCalculateAlarm"
             android:enabled="true"
             android:exported="false">
