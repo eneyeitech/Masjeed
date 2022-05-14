@@ -14,6 +14,7 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
 
+import com.example.android.masjeed.services.PrayerAlarmService;
 import com.google.android.material.snackbar.Snackbar;
 
 import androidx.appcompat.app.AlertDialog;
@@ -136,9 +137,9 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        getApplicationContext().startService(new Intent(getApplicationContext(), PrayingDayCalculateHandler.class));
+        //getApplicationContext().startService(new Intent(getApplicationContext(), PrayingDayCalculateHandler.class));
         //fetchMosqueTimings();
-        triggerAt5AfterMidnight(getApplicationContext());
+        //triggerAt5AfterMidnight(getApplicationContext());
     }
 
     @Override
@@ -395,12 +396,13 @@ public class MainActivity extends AppCompatActivity {
                                 }
                             });
                             Log.d("Love::2", "rows retrived " + numRows);
-                            getApplicationContext().startService(new Intent(getApplicationContext(), PrayingDayCalculateHandler.class));
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
-                                Log.d("Love::1.", "My Love");
-                                //getApplicationContext().startForegroundService(new Intent(getApplicationContext(), PrayingDayCalculateHandler.class));
-                            }else {
+                            //getApplicationContext().startService(new Intent(getApplicationContext(), PrayingDayCalculateHandler.class));
 
+                            Intent intentService = new Intent(getApplicationContext(), PrayerAlarmService.class);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                getApplicationContext().startService(intentService);
+                            } else {
+                                getApplicationContext().startService(intentService);
                             }
 
                         } catch (ParseException e) {
@@ -423,7 +425,13 @@ public class MainActivity extends AppCompatActivity {
                                     .commit();
 
                             TimingsFragment fragment = (TimingsFragment) fragmentManager.findFragmentByTag("timings1");
-                            getApplicationContext().startService(new Intent(getApplicationContext(), PrayingDayCalculateHandler.class));
+                            //getApplicationContext().startService(new Intent(getApplicationContext(), PrayingDayCalculateHandler.class));
+                            Intent intentService = new Intent(getApplicationContext(), PrayerAlarmService.class);
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+                                getApplicationContext().startService(intentService);
+                            } else {
+                                getApplicationContext().startService(intentService);
+                            }
 
                             Toast.makeText(getApplicationContext(),"No/Poor Network",Toast.LENGTH_LONG).show();
 

@@ -10,6 +10,7 @@
 
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.WAKE_LOCK" />
@@ -23,6 +24,7 @@
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE" />
 
     <application
+        android:name=".application.App"
         android:allowBackup="true"
         android:icon="@drawable/roundicon"
         android:label="@string/app_name"
@@ -98,6 +100,20 @@
                 <action android:name="android.intent.action.TIME_SET" />
             </intent-filter>
         </receiver>
+
+        <activity android:name=".activities.PrayerActivity">
+        </activity>
+
+        <receiver android:name=".receivers.PrayerBroadcastReceiver"
+            android:exported="false"
+            >
+            <intent-filter>
+                <action android:name="android.intent.action.BOOT_COMPLETED" />
+            </intent-filter>
+        </receiver>
+
+        <service android:name=".services.PrayerService" />
+        <service android:name=".services.PrayerAlarmService" />
     </application>
 
 </manifest>
