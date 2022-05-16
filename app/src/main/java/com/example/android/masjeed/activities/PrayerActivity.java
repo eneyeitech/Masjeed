@@ -48,7 +48,7 @@ public class PrayerActivity extends AppCompatActivity {
             public void onClick(View v) {
                 Calendar calendar = Calendar.getInstance();
                 calendar.setTimeInMillis(System.currentTimeMillis());
-                calendar.add(Calendar.MINUTE, 2);
+                calendar.add(Calendar.MINUTE, 5);
 
                 Prayer prayer = new Prayer(
                         new Random().nextInt(Integer.MAX_VALUE),
@@ -56,6 +56,7 @@ public class PrayerActivity extends AppCompatActivity {
                         calendar.get(Calendar.MINUTE),
                         "Snooze"
                 );
+                prayer.setRecurring(false);
 
                 prayer.schedule(getApplicationContext());
 

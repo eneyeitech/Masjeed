@@ -122,11 +122,11 @@ public class MainActivity extends AppCompatActivity {
        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
          && !notificationManager.isNotificationPolicyAccessGranted()) {
 
-         Intent intent = new Intent(
+         /**Intent intent = new Intent(
          android.provider.Settings
          .ACTION_NOTIFICATION_POLICY_ACCESS_SETTINGS);
 
-         startActivity(intent);
+         startActivity(intent);*/
          }
 
         binding.fab.setOnClickListener(new View.OnClickListener() {

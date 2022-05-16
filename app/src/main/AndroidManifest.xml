@@ -114,6 +114,7 @@
 
         <service android:name=".services.PrayerService" />
         <service android:name=".services.PrayerAlarmService" />
+        <service android:name=".services.ReschedulePrayerAlarmService" />
     </application>
 
 </manifest>

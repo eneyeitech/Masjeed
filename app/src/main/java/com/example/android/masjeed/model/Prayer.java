@@ -25,7 +25,7 @@ public class Prayer {
 
     private int alarmId;
 
-    private boolean started;
+    private boolean started, recurring = true;
 
     private int hour, minute;
 
@@ -52,6 +52,13 @@ public class Prayer {
         return minute;
     }
 
+    public boolean isRecurring() {
+        return recurring;
+    }
+
+    public void setRecurring(boolean recurring) {
+        this.recurring = recurring;
+    }
 
     public int getAlarmId() {
         return alarmId;
@@ -129,19 +136,63 @@ public class Prayer {
             calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH) + 1);
         }
 
-        //String toastText = String.format("Recurring Alarm %s scheduled for %s at %02d:%02d", title, getRecurringDaysText(), hour, minute, alarmId);
-        //Toast.makeText(context, toastText, Toast.LENGTH_LONG).show();
+        if (!recurring) {
+            String toastText = null;
+            try {
+                toastText = String.format("One Time Alarm %s scheduled for %s at %02d:%02d", title, getTitleText(), hour, minute, alarmId);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            Toast.makeText(context, toastText, Toast.LENGTH_LONG).show();
 
-        final long RUN_DAILY = 24 * 60 * 60 * 1000;
-        alarmManager.setRepeating(
-        AlarmManager.RTC_WAKEUP,
-        calendar.getTimeInMillis(),
-        RUN_DAILY,
-        alarmPendingIntent
-        );
+            alarmManager.setExact(
+                    AlarmManager.RTC_WAKEUP,
+                    calendar.getTimeInMillis(),
+                    alarmPendingIntent
+            );
+        } else {
+            String toastText = String.format("Recurring Alarm %s scheduled for %s at %02d:%02d", title, getTitleText(), hour, minute, alarmId);
+            Toast.makeText(context, toastText, Toast.LENGTH_LONG).show();
+
+            final long RUN_DAILY = 24 * 60 * 60 * 1000;
+            alarmManager.setRepeating(
+                    AlarmManager.RTC_WAKEUP,
+                    calendar.getTimeInMillis(),
+                    RUN_DAILY,
+                    alarmPendingIntent
+            );
+        }
 
 
         this.started = true;
+    }
+
+    public String getTitleText(){
+        switch (title){
+            case FAJR:
+                return "Fajr";
+            case SUNRISE:
+                return "Sunrise";
+            case ZUHR:
+            {
+                Calendar cal = Calendar.getInstance();
+                boolean isFriday = cal.get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY;
+                // changes the
+                if (isFriday) {
+                    return "Jumma'ah";
+                } else {
+                    return "Zuhr";
+                }
+            }
+            case ASR:
+                return "Asr";
+            case MAGRIB:
+                return "Magrib";
+            case ISHA:
+                return "Isha";
+            default:
+                return "Snooze";
+        }
     }
 
     public void cancelAlarm(Context context) {
@@ -156,10 +207,15 @@ public class Prayer {
         Log.i("cancel", toastText);
     }
 
-
-
-
-
+    @Override
+    public String toString() {
+        return "Prayer{" +
+                "alarmId=" + alarmId +
+                ", hour=" + hour +
+                ", minute=" + minute +
+                ", title='" + title + '\'' +
+                '}';
+    }
 }
 
 

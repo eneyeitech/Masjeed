@@ -1,7 +1,9 @@
 package com.example.android.masjeed.services;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.IBinder;
+import android.preference.PreferenceManager;
 import android.util.Log;
 
 import androidx.annotation.Nullable;
@@ -40,12 +42,81 @@ public class PrayerAlarmService extends LifecycleService {
 
         Collections.sort(prayerTimes);
 
-        int counter = 0;
+        int id1 = 1;
+        /**for(PrayerTime p: prayerTimes){
+
+            final int id = (int) System.currentTimeMillis();
+            Prayer prayer = new Prayer(id1, p.getHour(), p.getMinute(), p.getName());
+            prayer.cancelAlarm(getApplicationContext());
+            //prayer.schedule(getApplicationContext());
+            id1++;
+        }*/
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        final SharedPreferences.Editor editor = preferences.edit();
+
+
+        String idsConcat = preferences.getString("idsConcat", "");
+        Log.d("#IDSCONCATStatus", String.valueOf(idsConcat.isEmpty()));
+
+        if(!idsConcat.isEmpty()){
+            idsConcat = idsConcat.trim();
+            String[] idsArr = idsConcat.split(",");
+            for(int i=0;i<idsArr.length;i++){
+                String idStr = idsArr[i];
+                idStr = idStr.trim();
+                Log.d("#idsList", idStr);
+                String time = preferences.getString(idStr,"");
+                Log.d("#idsListB", String.valueOf(time.isEmpty()));
+                Log.d("#idTime", time);
+                if(!time.isEmpty()){
+                    String[] times = time.split(":");
+                    int hour = Integer.parseInt(times[0]);
+                    int minute = Integer.parseInt(times[1]);
+                    String name = times[2];
+                    int idInt = Integer.parseInt(idStr);
+                    Prayer prayer = new Prayer(idInt, hour, minute, name);
+                    prayer.cancelAlarm(getApplicationContext());
+                    editor.remove(idStr);
+                    editor.apply();
+                    Log.d("#Prayer", prayer.toString());
+
+                }
+            }
+        }
+
+        idsConcat = preferences.getString("idsConcat", "");
+        Log.d("#IDSCONCATStatus::1", String.valueOf(idsConcat.isEmpty()));
+
+        if(!idsConcat.isEmpty()){
+            idsConcat = idsConcat.trim();
+            String[] idsArr = idsConcat.split(",");
+            for(int i=0;i<idsArr.length;i++){
+                String idStr = idsArr[i];
+                idStr = idStr.trim();
+                Log.d("#idsList", idStr);
+                String time = preferences.getString(idStr,"");
+                Log.d("#listTime", time);
+
+            }
+        }
+
+        StringBuilder stringBuilder = new StringBuilder();
         for(PrayerTime p: prayerTimes){
+
             final int id = (int) System.currentTimeMillis();
             Prayer prayer = new Prayer(id, p.getHour(), p.getMinute(), p.getName());
+            stringBuilder.append(","+id);
+            editor.putString(id+"", p.getHour()+":"+p.getMinute()+":"+p.getName());
             prayer.schedule(getApplicationContext());
+            id1++;
         }
+        editor.putString("idsConcat",stringBuilder.toString());
+        editor.apply();
+        editor.commit();
+
+        Log.d("#IDSCONCAT", preferences.getString("idsConcat",""));
+
+
 
         return START_STICKY;
     }
