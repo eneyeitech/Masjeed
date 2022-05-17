@@ -56,7 +56,7 @@ public class PrayerAlarmService extends LifecycleService {
 
 
         String idsConcat = preferences.getString("idsConcat", "");
-        Log.d("#IDSCONCATStatus", String.valueOf(idsConcat.isEmpty()));
+        Log.d("#Shared Pref with IDS", String.valueOf(idsConcat.isEmpty()));
 
         if(!idsConcat.isEmpty()){
             idsConcat = idsConcat.trim();
@@ -64,10 +64,10 @@ public class PrayerAlarmService extends LifecycleService {
             for(int i=0;i<idsArr.length;i++){
                 String idStr = idsArr[i];
                 idStr = idStr.trim();
-                Log.d("#idsList", idStr);
+                Log.d("#Id Str", idStr);
                 String time = preferences.getString(idStr,"");
-                Log.d("#idsListB", String.valueOf(time.isEmpty()));
-                Log.d("#idTime", time);
+                Log.d("#Time available", String.valueOf(time.isEmpty()));
+                Log.d("#Time", time);
                 if(!time.isEmpty()){
                     String[] times = time.split(":");
                     int hour = Integer.parseInt(times[0]);
@@ -82,10 +82,12 @@ public class PrayerAlarmService extends LifecycleService {
 
                 }
             }
+            editor.remove("idsContact");
+            editor.apply();
         }
 
         idsConcat = preferences.getString("idsConcat", "");
-        Log.d("#IDSCONCATStatus::1", String.valueOf(idsConcat.isEmpty()));
+        Log.d("Shared Pref with IDS", String.valueOf(idsConcat.isEmpty()));
 
         if(!idsConcat.isEmpty()){
             idsConcat = idsConcat.trim();
@@ -96,7 +98,6 @@ public class PrayerAlarmService extends LifecycleService {
                 Log.d("#idsList", idStr);
                 String time = preferences.getString(idStr,"");
                 Log.d("#listTime", time);
-
             }
         }
 
@@ -107,6 +108,7 @@ public class PrayerAlarmService extends LifecycleService {
             Prayer prayer = new Prayer(id, p.getHour(), p.getMinute(), p.getName());
             stringBuilder.append(","+id);
             editor.putString(id+"", p.getHour()+":"+p.getMinute()+":"+p.getName());
+            Log.d("#Prayer Schedule", prayer.toString());
             prayer.schedule(getApplicationContext());
             id1++;
         }
@@ -116,7 +118,8 @@ public class PrayerAlarmService extends LifecycleService {
 
         Log.d("#IDSCONCAT", preferences.getString("idsConcat",""));
 
-
+        idsConcat = preferences.getString("idsConcat", "");
+        Log.d("Shared Pref with IDS", String.valueOf(idsConcat.isEmpty()));
 
         return START_STICKY;
     }

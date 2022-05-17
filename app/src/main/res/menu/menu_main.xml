@@ -27,16 +27,16 @@
         android:title="@string/action_location"
         app:showAsAction="always" /-->
 
-    <item
+    <!--item
         android:id="@+id/action_settings"
         android:orderInCategory="100"
         android:title="@string/action_settings"
-        app:showAsAction="never" />
+        app:showAsAction="never" /-->
 
-    <item
+    <!--item
         android:id="@+id/settings"
         android:title="@string/action_settings"
-        app:showAsAction="never" />
+        app:showAsAction="never" /-->
 
     <item
         android:id="@+id/mosques"
@@ -50,24 +50,24 @@
         android:onClick="addMosqueWebPage"
         app:showAsAction="never" />
 
-    <item
+    <!--item
         android:id="@+id/action_convert_date"
         android:title="@string/action_convert_date"
-        app:showAsAction="never" />
+        app:showAsAction="never" /-->
 
 
 
 
-    <item
+    <!--item
         android:id="@+id/worldpraye"
         android:title="@string/action_world"
-        app:showAsAction="never"/>
+        app:showAsAction="never"/-->
 
 
-    <item
+    <!--item
         android:id="@+id/action_share"
         android:title="@string/action_share"
-        app:showAsAction="never"/>
+        app:showAsAction="never"/-->
 
     <item
         android:id="@+id/action_about_app"

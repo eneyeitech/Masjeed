@@ -157,9 +157,9 @@ public class MainActivity extends AppCompatActivity {
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_settings) {
+        /**if (id == R.id.action_settings) {
             return true;
-        }else if (id == R.id.action_refresh_timings) {
+        }else*/ if (id == R.id.action_refresh_timings) {
             fetchMosqueTimings();
         } else if (id == R.id.action_add_mosque){
             insertMosqueCode();
@@ -358,6 +358,14 @@ public class MainActivity extends AppCompatActivity {
                             Log.d("MA::Friday",String.valueOf(format.format(fridayDate)));
                             Log.d("Donation Text :: ", donation);
 
+                            // New Additions
+                            MosqueTimings.addMosqueTiming("fajr", String.valueOf(fajrDate));
+                            MosqueTimings.addMosqueTiming("sunrise", String.valueOf(sunriseDate));
+                            MosqueTimings.addMosqueTiming("zuhr", String.valueOf(zuhrDate));
+                            MosqueTimings.addMosqueTiming("asr", String.valueOf(asrDate));
+                            MosqueTimings.addMosqueTiming("magrib", String.valueOf(magribDate));
+                            MosqueTimings.addMosqueTiming("isha", String.valueOf(ishaDate));
+
                             Calendar cal = Calendar.getInstance();
 
                             boolean friday = cal.get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY;
@@ -426,12 +434,12 @@ public class MainActivity extends AppCompatActivity {
 
                             TimingsFragment fragment = (TimingsFragment) fragmentManager.findFragmentByTag("timings1");
                             //getApplicationContext().startService(new Intent(getApplicationContext(), PrayingDayCalculateHandler.class));
-                            Intent intentService = new Intent(getApplicationContext(), PrayerAlarmService.class);
+                            /**Intent intentService = new Intent(getApplicationContext(), PrayerAlarmService.class);
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
                                 getApplicationContext().startService(intentService);
                             } else {
                                 getApplicationContext().startService(intentService);
-                            }
+                            }*/
 
                             Toast.makeText(getApplicationContext(),"No/Poor Network",Toast.LENGTH_LONG).show();
 
@@ -456,6 +464,7 @@ public class MainActivity extends AppCompatActivity {
      *Abdulmumin
      */
     public void updateMosqueTimeWebPage(MenuItem item) {
+        Log.i("updateMosqueTimeWebPage","Working!");
         Uri webpage = Uri.parse("https://almasjeed.com/mosque-prayer-time-update/");
         Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
         if (intent.resolveActivity(getPackageManager()) != null) {
@@ -468,6 +477,7 @@ public class MainActivity extends AppCompatActivity {
      *Abdulmumin
      */
     public void addMosqueWebPage(MenuItem item) {
+        Log.i("addMosqueWebPage","Working!");
         Uri webpage = Uri.parse("https://almasjeed.com/add-mosques/");
         Intent intent = new Intent(Intent.ACTION_VIEW, webpage);
         if (intent.resolveActivity(getPackageManager()) != null) {

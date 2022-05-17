@@ -126,8 +126,18 @@ public class Prayer {
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
-        calendar.set(Calendar.HOUR_OF_DAY, hour);
-        calendar.set(Calendar.MINUTE, minute);
+
+        int hr = hour;
+        int min = minute;
+        if ((min - 5) < 0){
+            hr = hr - 1;
+            min = 60 - Math.abs(min - 5);
+        } else {
+            min = min - 5;
+        }
+
+        calendar.set(Calendar.HOUR_OF_DAY, hr);
+        calendar.set(Calendar.MINUTE, min);
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
 

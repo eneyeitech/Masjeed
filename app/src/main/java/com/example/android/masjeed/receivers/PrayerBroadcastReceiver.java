@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import com.example.android.masjeed.services.PrayerAlarmService;
 import com.example.android.masjeed.services.PrayerService;
+import com.example.android.masjeed.services.ReschedulePrayerAlarmService;
 
 public class PrayerBroadcastReceiver extends BroadcastReceiver {
 
@@ -25,7 +26,7 @@ public class PrayerBroadcastReceiver extends BroadcastReceiver {
         if (Intent.ACTION_BOOT_COMPLETED.equals(intent.getAction())) {
             String toastText = String.format("Alarm Reboot");
             Toast.makeText(context, toastText, Toast.LENGTH_SHORT).show();
-            startPrayerAlarmService(context);
+            startReschedulePrayerAlarmService(context);
         } else {
             String toastText = String.format("Alarm Received");
             Toast.makeText(context, toastText, Toast.LENGTH_SHORT).show();
@@ -43,8 +44,8 @@ public class PrayerBroadcastReceiver extends BroadcastReceiver {
         }
     }
 
-    private void startPrayerAlarmService(Context context) {
-        Intent intentService = new Intent(context, PrayerAlarmService.class);
+    private void startReschedulePrayerAlarmService(Context context) {
+        Intent intentService = new Intent(context, ReschedulePrayerAlarmService.class);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
             context.startForegroundService(intentService);
         } else {

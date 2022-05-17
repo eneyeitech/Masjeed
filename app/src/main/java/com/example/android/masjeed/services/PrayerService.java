@@ -17,6 +17,8 @@ import androidx.core.app.NotificationCompat;
 import com.example.android.masjeed.R;
 import com.example.android.masjeed.activities.PrayerActivity;
 import com.example.android.masjeed.application.App;
+import com.example.android.masjeed.receivers.DismissReceiver;
+import com.example.android.masjeed.receivers.SnoozeReceiver;
 
 public class PrayerService extends Service {
 
@@ -36,16 +38,23 @@ public class PrayerService extends Service {
 
     @Override
     public int onStartCommand(Intent intent, int flags, int startId) {
-        Intent notificationIntent = new Intent(this, PrayerActivity.class);
+        //Intent notificationIntent = new Intent(this, PrayerActivity.class);
+        Intent notificationIntent = new Intent();
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
 
-        String alarmTitle = String.format("%s Alarm", intent.getStringExtra(TITLE));
+        String alarmTitle = String.format("%s", intent.getStringExtra(TITLE));
+
+        Intent dismissIntent = new Intent(this, DismissReceiver.class);
+
+        Intent snoozeIntent = new Intent(this, SnoozeReceiver.class);
 
         Notification notification = new NotificationCompat.Builder(this, App.CHANNEL_ID)
                 .setContentTitle(alarmTitle)
-                .setContentText("Reminder .. Reminder")
+                .setContentText("Prayer reminder")
                 .setSmallIcon(R.drawable.notification_white)
                 .setContentIntent(pendingIntent)
+                .addAction(R.drawable.notification_white, "Dismiss", PendingIntent.getBroadcast(this, 0, dismissIntent, 0))
+                .addAction(R.drawable.notification_white, "Snooze", PendingIntent.getBroadcast(this, 0, snoozeIntent, 0))
                 .build();
 
         mediaPlayer.start();
