@@ -55,6 +55,7 @@ public class PrayerService extends Service {
                 .setContentIntent(pendingIntent)
                 .addAction(R.drawable.notification_white, "Dismiss", PendingIntent.getBroadcast(this, 0, dismissIntent, 0))
                 .addAction(R.drawable.notification_white, "Snooze", PendingIntent.getBroadcast(this, 0, snoozeIntent, 0))
+                .setTimeoutAfter(120000)
                 .build();
 
         mediaPlayer.start();
