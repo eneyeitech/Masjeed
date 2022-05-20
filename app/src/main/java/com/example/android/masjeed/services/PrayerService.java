@@ -20,6 +20,8 @@ import com.example.android.masjeed.application.App;
 import com.example.android.masjeed.receivers.DismissReceiver;
 import com.example.android.masjeed.receivers.SnoozeReceiver;
 
+import java.util.Calendar;
+
 public class PrayerService extends Service {
 
     private MediaPlayer mediaPlayer;
@@ -42,7 +44,21 @@ public class PrayerService extends Service {
         Intent notificationIntent = new Intent();
         PendingIntent pendingIntent = PendingIntent.getActivity(this, 0, notificationIntent, 0);
 
-        String alarmTitle = String.format("%s", intent.getStringExtra(TITLE));
+        String alarmTitle = null;
+        Calendar cal = Calendar.getInstance();
+        boolean isFriday = cal.get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY;
+        // changes the
+        if(intent.getStringExtra(TITLE).equalsIgnoreCase("Zuhr Prayer")){
+            if (isFriday) {
+                alarmTitle = String.format("%s", "Jumma'ah Prayer");
+            } else {
+                alarmTitle = String.format("%s", intent.getStringExtra(TITLE));
+            }
+        } else {
+            alarmTitle = String.format("%s", intent.getStringExtra(TITLE));
+        }
+
+        //String alarmTitle = String.format("%s", intent.getStringExtra(TITLE));
 
         Intent dismissIntent = new Intent(this, DismissReceiver.class);
 

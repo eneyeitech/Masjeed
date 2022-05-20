@@ -48,13 +48,6 @@ public class Alarms {
         alarmReceiver.putExtras(details);
         PendingIntent pendingIntent = PendingIntent.getBroadcast(context, id, alarmReceiver, PendingIntent.FLAG_ONE_SHOT);
 
-        ComponentName receiver = new ComponentName(context, StartUpBootReceiver.class);
-        PackageManager pm = context.getPackageManager();
-
-        pm.setComponentEnabledSetting(receiver,
-                PackageManager.COMPONENT_ENABLED_STATE_DISABLED,
-                PackageManager.DONT_KILL_APP);
-
         //alarmManager.set(AlarmManager.RTC_WAKEUP, calendar.getTimeInMillis(), pendingIntent);
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             // kitkat...

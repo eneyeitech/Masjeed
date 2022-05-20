@@ -54,45 +54,45 @@
             </intent-filter>
         </activity>
 
-        <service
+        <!--service
             android:name=".PrayingDayCalculateHandler"
             android:enabled="true"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.example.broadcasttest.MonitorService" />
             </intent-filter>
-        </service>
-        <service
+        </service-->
+        <!--service
             android:name=".PrayerNotification"
             android:enabled="true"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.example.broadcasttest.MonitorService" />
             </intent-filter>
-        </service>
-        <service
+        </service-->
+        <!--service
             android:name=".PrayingDayCalculateHandler"
             android:enabled="true"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.example.broadcasttest.MonitorService" />
             </intent-filter>
-        </service>
+        </service-->
 
-        <receiver
+        <!--receiver
             android:name=".PrayerAlarm"
-            android:enabled="true" />
-        <receiver
+            android:enabled="true" /-->
+        <!--receiver
             android:name=".AlarmReceiver"
-            android:enabled="true" />
-        <receiver
+            android:enabled="true" /-->
+        <!--receiver
             android:name=".PrayingDayCalculateAlarm"
             android:enabled="true"
             android:exported="false">
             <intent-filter>
                 <action android:name="com.mindtrack.muslimorganizer.calculatepraying" />
             </intent-filter>
-        </receiver>
+        </receiver-->
         <!--receiver
             android:name=".StartUpBootReceiver"
             android:exported="false">
@@ -100,15 +100,15 @@
                 <action android:name="android.intent.action.BOOT_COMPLETED" />
             </intent-filter>
         </receiver-->
-        <receiver android:name=".RingingAlarm" />
-        <receiver android:name=".SilentMoodAlarm" />
-        <receiver
+        <!--receiver android:name=".RingingAlarm" /-->
+        <!--receiver android:name=".SilentMoodAlarm" /-->
+        <!--receiver
             android:name=".TimeChangedReceiver"
             android:exported="false">
             <intent-filter>
                 <action android:name="android.intent.action.TIME_SET" />
             </intent-filter>
-        </receiver>
+        </receiver-->
 
         <activity android:name=".activities.PrayerActivity">
         </activity>

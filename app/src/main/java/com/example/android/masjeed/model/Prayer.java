@@ -99,14 +99,16 @@ public class Prayer {
                 break;
             case ZUHR:
                 {
-                    Calendar cal = Calendar.getInstance();
+                    intent.putExtra(TITLE, "Zuhr Prayer");
+
+                    /**Calendar cal = Calendar.getInstance();
                     boolean isFriday = cal.get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY;
                     // changes the
                     if (isFriday) {
                         intent.putExtra(TITLE, "Jumma'ah Prayer");
                     } else {
                         intent.putExtra(TITLE, "Zuhr Prayer");
-                    }
+                    }*/
                 }
                 break;
             case ASR:
@@ -129,17 +131,24 @@ public class Prayer {
 
         int hr = hour;
         int min = minute;
-        if ((min - 5) < 0){
-            hr = hr - 1;
-            min = 60 - Math.abs(min - 5);
-        } else {
-            min = min - 5;
+
+        if(recurring){
+            if ((min - 5) < 0){
+                hr = hr - 1;
+                min = 60 - Math.abs(min - 5);
+            } else {
+                min = min - 5;
+            }
         }
 
         calendar.set(Calendar.HOUR_OF_DAY, hr);
         calendar.set(Calendar.MINUTE, min);
         calendar.set(Calendar.SECOND, 0);
         calendar.set(Calendar.MILLISECOND, 0);
+
+        if(recurring){
+            //calendar.add(calendar.MINUTE, -6);
+        }
 
         // if alarm time has already passed, increment day by 1
         if (calendar.getTimeInMillis() <= System.currentTimeMillis()) {
@@ -168,7 +177,7 @@ public class Prayer {
             alarmManager.setRepeating(
                     AlarmManager.RTC_WAKEUP,
                     calendar.getTimeInMillis(),
-                    RUN_DAILY,
+                    AlarmManager.INTERVAL_DAY,
                     alarmPendingIntent
             );
         }
