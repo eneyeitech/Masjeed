@@ -17,10 +17,14 @@ import androidx.core.app.NotificationCompat;
 import com.example.android.masjeed.R;
 import com.example.android.masjeed.activities.PrayerActivity;
 import com.example.android.masjeed.application.App;
+import com.example.android.masjeed.model.Prayer;
 import com.example.android.masjeed.receivers.DismissReceiver;
 import com.example.android.masjeed.receivers.SnoozeReceiver;
 
 import java.util.Calendar;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class PrayerService extends Service {
 
@@ -59,6 +63,32 @@ public class PrayerService extends Service {
         }
 
         //String alarmTitle = String.format("%s", intent.getStringExtra(TITLE));
+        /** new */
+
+        int hr = intent.getIntExtra("HOUR", 0);
+        int min = intent.getIntExtra("MINUTE", 0);
+        String title = intent.getStringExtra(TITLE);
+        boolean recurring = intent.getBooleanExtra("RECURRING", false);
+
+        if (recurring) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTimeInMillis(System.currentTimeMillis());
+            calendar.add(Calendar.MINUTE, 5);
+
+            Prayer prayer = new Prayer(
+                    new Random().nextInt(Integer.MAX_VALUE),
+                    hr,
+                    min,
+                    title
+            );
+            prayer.setRecurring(true);
+
+            prayer.schedule(getApplicationContext());
+        }
+
+
+
+        /** new end*/
 
         Intent dismissIntent = new Intent(this, DismissReceiver.class);
 
@@ -71,13 +101,23 @@ public class PrayerService extends Service {
                 .setContentIntent(pendingIntent)
                 .addAction(R.drawable.notification_white, "Dismiss", PendingIntent.getBroadcast(this, 0, dismissIntent, 0))
                 .addAction(R.drawable.notification_white, "Snooze", PendingIntent.getBroadcast(this, 0, snoozeIntent, 0))
-                .setTimeoutAfter(120000)
                 .build();
 
         mediaPlayer.start();
 
         long[] pattern = { 0, 100, 1000 };
         vibrator.vibrate(pattern, 0);
+
+        TimerTask task = new TimerTask() {
+            public void run() {
+                Intent intentService = new Intent(getApplicationContext(), PrayerService.class);
+                getApplicationContext().stopService(intentService);
+            }
+        };
+        Timer timer = new Timer("End timer");
+
+        long delay = 180000L;
+        timer.schedule(task, delay);
 
         startForeground(1, notification);
 

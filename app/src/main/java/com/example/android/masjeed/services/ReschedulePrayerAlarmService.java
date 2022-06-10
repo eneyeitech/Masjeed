@@ -19,6 +19,8 @@ import com.example.android.masjeed.application.App;
 import com.example.android.masjeed.model.Prayer;
 
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 
 public class ReschedulePrayerAlarmService extends LifecycleService {
     @Override
@@ -73,10 +75,20 @@ public class ReschedulePrayerAlarmService extends LifecycleService {
                 .setSmallIcon(R.drawable.notification_white)
                 .setContentIntent(pendingIntent)
                 .setAutoCancel(true)
-                .setTimeoutAfter(15000)
                 .build();
 
-        startForeground(1, notification);
+        TimerTask task = new TimerTask() {
+            public void run() {
+                Intent intentService = new Intent(getApplicationContext(), ReschedulePrayerAlarmService.class);
+                getApplicationContext().stopService(intentService);
+            }
+        };
+        Timer timer = new Timer("End timer");
+
+        long delay = 180000L;
+        timer.schedule(task, delay);
+
+        startForeground(2, notification);
 
         return START_STICKY;
     }
