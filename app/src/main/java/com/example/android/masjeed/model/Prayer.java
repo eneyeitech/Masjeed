@@ -1,6 +1,7 @@
 package com.example.android.masjeed.model;
 
 import static com.example.android.masjeed.receivers.PrayerBroadcastReceiver.ASR;
+import static com.example.android.masjeed.receivers.PrayerBroadcastReceiver.CODE;
 import static com.example.android.masjeed.receivers.PrayerBroadcastReceiver.FAJR;
 import static com.example.android.masjeed.receivers.PrayerBroadcastReceiver.ISHA;
 import static com.example.android.masjeed.receivers.PrayerBroadcastReceiver.MAGRIB;
@@ -77,19 +78,22 @@ public class Prayer {
         return title;
     }
 
+    public boolean isReschedule() {
+        return reschedule;
+    }
+
+    public void setReschedule(boolean reschedule) {
+        this.reschedule = reschedule;
+    }
+
     public void setTitle(String title) {
         this.title = title;
     }
 
 
-
-
-    public void schedule(Context context) {
+    public void scheduleBckUp(Context context) {
         AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-
         Intent intent = new Intent(context, PrayerBroadcastReceiver.class);
-
-
 
         switch (title){
             case FAJR:
@@ -99,19 +103,10 @@ public class Prayer {
                 intent.putExtra(TITLE, "Sunrise Prayer");
                 break;
             case ZUHR:
-                {
-                    intent.putExtra(TITLE, "Zuhr Prayer");
-
-                    /**Calendar cal = Calendar.getInstance();
-                    boolean isFriday = cal.get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY;
-                    // changes the
-                    if (isFriday) {
-                        intent.putExtra(TITLE, "Jumma'ah Prayer");
-                    } else {
-                        intent.putExtra(TITLE, "Zuhr Prayer");
-                    }*/
-                }
-                break;
+            {
+                intent.putExtra(TITLE, "Zuhr Prayer");
+            }
+            break;
             case ASR:
                 intent.putExtra(TITLE, "Asr Prayer");
                 break;
@@ -125,25 +120,16 @@ public class Prayer {
                 intent.putExtra(TITLE, "Snooze");
         }
 
-        PendingIntent alarmPendingIntent = PendingIntent.getBroadcast(context, alarmId, intent, 0);
+        //PendingIntent alarmPendingIntent = PendingIntent.getBroadcast(context, alarmId, intent, 0);
 
         Calendar calendar = Calendar.getInstance();
         calendar.setTimeInMillis(System.currentTimeMillis());
 
         int hr = hour;
         int min = minute;
+
         intent.putExtra("HOUR", hr);
         intent.putExtra("MINUTE", min);
-
-
-       /** if(recurring){
-            if ((min - 5) < 0){
-                hr = hr - 1;
-                min = 60 - Math.abs(min - 5);
-            } else {
-                min = min - 5;
-            }
-        }*/
 
         calendar.set(Calendar.HOUR_OF_DAY, hr);
         calendar.set(Calendar.MINUTE, min);
@@ -154,6 +140,8 @@ public class Prayer {
             calendar.add(calendar.MINUTE, -5);
             intent.putExtra("RECURRING", true);
         }
+
+        PendingIntent alarmPendingIntent = PendingIntent.getBroadcast(context, alarmId, intent, 0);
 
         // if alarm time has already passed, increment day by 1
         if (calendar.getTimeInMillis() <= System.currentTimeMillis()) {
@@ -186,6 +174,160 @@ public class Prayer {
                     RUN_DAILY,
                     alarmPendingIntent
             );
+        }
+
+
+        this.started = true;
+    }
+
+    public void schedule(Context context) {
+        AlarmManager alarmManager = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+
+        Intent intent = new Intent(context, PrayerBroadcastReceiver.class);
+
+        switch (title){
+            case FAJR:
+                intent.putExtra(TITLE, "Fajr Prayer");
+                intent.putExtra(CODE, FAJR);
+                break;
+            case SUNRISE:
+                intent.putExtra(TITLE, "Sunrise Prayer");
+                intent.putExtra(CODE, SUNRISE);
+                break;
+            case ZUHR:
+            {
+                intent.putExtra(TITLE, "Zuhr Prayer");
+                intent.putExtra(CODE, ZUHR);
+                /**Calendar cal = Calendar.getInstance();
+                 boolean isFriday = cal.get(Calendar.DAY_OF_WEEK) == Calendar.FRIDAY;
+                 // changes the
+                 if (isFriday) {
+                 intent.putExtra(TITLE, "Jumma'ah Prayer");
+                 } else {
+                 intent.putExtra(TITLE, "Zuhr Prayer");
+                 }*/
+            }
+            break;
+            case ASR:
+                intent.putExtra(TITLE, "Asr Prayer");
+                intent.putExtra(CODE, ASR);
+                break;
+            case MAGRIB:
+                intent.putExtra(TITLE, "Magrib Prayer");
+                intent.putExtra(CODE, MAGRIB);
+                break;
+            case ISHA:
+                intent.putExtra(TITLE, "Isha Prayer");
+                intent.putExtra(CODE, ISHA);
+                break;
+            default:
+                intent.putExtra(TITLE, "Snooze");
+        }
+
+        //PendingIntent alarmPendingIntent = PendingIntent.getBroadcast(context, alarmId, intent, 0);
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTimeInMillis(System.currentTimeMillis());
+
+        int hr = hour;
+        int min = minute;
+        intent.putExtra("HOUR", hr);
+        intent.putExtra("MINUTE", min);
+
+
+        /** if(recurring){
+         if ((min - 5) < 0){
+         hr = hr - 1;
+         min = 60 - Math.abs(min - 5);
+         } else {
+         min = min - 5;
+         }
+         }*/
+
+        calendar.set(Calendar.HOUR_OF_DAY, hr);
+        calendar.set(Calendar.MINUTE, min);
+        calendar.set(Calendar.SECOND, 0);
+        calendar.set(Calendar.MILLISECOND, 0);
+
+        if(recurring){
+            calendar.add(calendar.MINUTE, -5);
+            intent.putExtra("RECURRING", true);
+        }
+
+        PendingIntent alarmPendingIntent = PendingIntent.getBroadcast(context, alarmId, intent, 0);
+
+        // if alarm time has already passed, increment day by 1
+        if (calendar.getTimeInMillis() <= System.currentTimeMillis()) {
+            calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH) + 1);
+        } else if(reschedule){
+            calendar.set(Calendar.DAY_OF_MONTH, calendar.get(Calendar.DAY_OF_MONTH) + 1);
+        }
+
+        if (!recurring) {
+            String toastText = null;
+            try {
+                toastText = String.format("One Time Alarm %s scheduled for %s at %02d:%02d", title, getTitleText(), hour, minute, alarmId);
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+            Toast.makeText(context, toastText, Toast.LENGTH_LONG).show();
+
+            /**alarmManager.setExact(
+             AlarmManager.RTC_WAKEUP,
+             calendar.getTimeInMillis(),
+             alarmPendingIntent
+             );*/
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                alarmManager.setExactAndAllowWhileIdle(
+                        AlarmManager.RTC_WAKEUP,
+                        calendar.getTimeInMillis(),
+                        alarmPendingIntent
+                );
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                alarmManager.setExact(
+                        AlarmManager.RTC_WAKEUP,
+                        calendar.getTimeInMillis(),
+                        alarmPendingIntent
+                );
+            } else {
+                alarmManager.set(
+                        AlarmManager.RTC_WAKEUP,
+                        calendar.getTimeInMillis(),
+                        alarmPendingIntent
+                );
+            }
+        } else {
+            String toastText = String.format("Recurring Alarm %s scheduled for %s at %02d:%02d", title, getTitleText(), hour, minute, alarmId);
+            Toast.makeText(context, toastText, Toast.LENGTH_LONG).show();
+
+            /*final long RUN_DAILY = 24 * 60 * 60 * 1000;
+            alarmManager.setRepeating(
+                    AlarmManager.RTC_WAKEUP,
+                    calendar.getTimeInMillis(),
+                    //AlarmManager.INTERVAL_DAY,
+                    RUN_DAILY,
+                    alarmPendingIntent
+            );*/
+
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                alarmManager.setExactAndAllowWhileIdle(
+                        AlarmManager.RTC_WAKEUP,
+                        calendar.getTimeInMillis(),
+                        alarmPendingIntent
+                );
+            } else if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                alarmManager.setExact(
+                        AlarmManager.RTC_WAKEUP,
+                        calendar.getTimeInMillis(),
+                        alarmPendingIntent
+                );
+            } else {
+                alarmManager.set(
+                        AlarmManager.RTC_WAKEUP,
+                        calendar.getTimeInMillis(),
+                        alarmPendingIntent
+                );
+            }
         }
 
 
@@ -387,6 +529,7 @@ public class Prayer {
                 "alarmId=" + alarmId +
                 ", hour=" + hour +
                 ", minute=" + minute +
+                ", reschedule=" + reschedule +
                 ", title='" + title + '\'' +
                 '}';
     }

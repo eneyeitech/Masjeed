@@ -10,6 +10,7 @@ import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.IBinder;
 import android.os.Vibrator;
+import android.util.Log;
 
 import androidx.annotation.Nullable;
 import androidx.core.app.NotificationCompat;
@@ -63,32 +64,6 @@ public class PrayerService extends Service {
         }
 
         //String alarmTitle = String.format("%s", intent.getStringExtra(TITLE));
-        /** new */
-
-        int hr = intent.getIntExtra("HOUR", 0);
-        int min = intent.getIntExtra("MINUTE", 0);
-        String title = intent.getStringExtra(TITLE);
-        boolean recurring = intent.getBooleanExtra("RECURRING", false);
-
-        if (recurring) {
-            Calendar calendar = Calendar.getInstance();
-            calendar.setTimeInMillis(System.currentTimeMillis());
-            calendar.add(Calendar.MINUTE, 5);
-
-            Prayer prayer = new Prayer(
-                    new Random().nextInt(Integer.MAX_VALUE),
-                    hr,
-                    min,
-                    title
-            );
-            prayer.setRecurring(true);
-
-            prayer.schedule(getApplicationContext());
-        }
-
-
-
-        /** new end*/
 
         Intent dismissIntent = new Intent(this, DismissReceiver.class);
 
